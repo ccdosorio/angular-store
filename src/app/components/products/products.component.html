@@ -1,5 +1,9 @@
 <p>La cantidad {{ myShoppingCar.length }}</p>
-<p>Total: ${{ total }}</p>
+<p>Total: {{ total | currency: "Q" }}</p>
+<p>Today: {{ today | timeAgo }}</p>
+<p>{{ 'Hola Como' | vowels }}</p>
+<!-- <p>Other Date: {{ date | date: 'yyyy.dd.MM' }}</p> -->
+<!-- <p>{{ 'hOlA cOmO estAN' | uppercase }}</p> -->
 <div class="products--grid">
   <app-product
     [product]="product"

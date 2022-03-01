@@ -15,7 +15,7 @@ export class NavComponent implements OnInit {
   }
 
   toggleMenu() {
-    console.log("toggle");
+    // console.log("toggle");
     this.activeMenu = !this.activeMenu;
   }
 
