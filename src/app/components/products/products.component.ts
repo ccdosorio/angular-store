@@ -17,6 +17,17 @@ export class ProductsComponent implements OnInit {
   today = new Date();
   date = new Date(2021, 1, 21);
   showProductDetail: boolean = false;
+  productChosen: Product = {
+    id: '',
+    price: 0,
+    images: [],
+    title: '',
+    description: '',
+    category: {
+      id: '',
+      name: ''
+    }
+  }
 
   constructor(
     private storeService: StoreService,
@@ -27,9 +38,9 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit(): void {
     this.productsService.getAllProducts()
-    .subscribe(data => {
-      this.products = data;
-    });
+      .subscribe(data => {
+        this.products = data;
+      });
   }
 
   onAddToShoppingCar(product: Product) {
@@ -43,10 +54,10 @@ export class ProductsComponent implements OnInit {
 
   onShowDetail(id: string) {
     this.productsService.getProduct(id)
-    .subscribe(data => {
-      this.showProductDetail = !this.showProductDetail;
-      console.log('product', data);
-    })
+      .subscribe(data => {
+        this.showProductDetail = !this.showProductDetail;
+        this.productChosen = data;
+      })
   }
 
 }
