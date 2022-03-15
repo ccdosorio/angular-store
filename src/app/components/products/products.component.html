@@ -6,6 +6,7 @@
     (addedProduct)="onAddToShoppingCar($event)"
     (showDetail)="onShowDetail($event)"
   ></app-product>
+  <button (click)="loadData()">load more</button>
 </div>
 <div class="product-detail" [class.active]="showProductDetail">
   <div *ngIf="productChosen">

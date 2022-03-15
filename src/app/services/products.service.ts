@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { retry } from 'rxjs';
 
 import { CreateProductDTO, Product, UpdateProductDTO } from '../models/product.model';
 
@@ -9,15 +10,30 @@ import { CreateProductDTO, Product, UpdateProductDTO } from '../models/product.m
 export class ProductsService {
 
   private _apiUrl: string = 'https://young-sands-07814.herokuapp.com/api/products';
+  // private _apiUrl: string = 'https://young-sands-07814.herokuuuapp.com/api/products'; -> para el retry
 
   constructor(private http: HttpClient) { }
 
-  getAllProducts() {
-    return this.http.get<Product[]>(this._apiUrl);
+  getAllProducts(limit?: number, offset?: number) {
+    let params = new HttpParams();
+    if (limit !== undefined && offset !== undefined) {
+      params = params.set('limit', limit);
+      params = params.set('offset', offset);
+    }
+    return this.http.get<Product[]>(this._apiUrl, { params })
+    .pipe(
+      retry(3) // re intentar la petición 3 veces, en este caso modificamos el endpoint a uno erróneo
+    )
   }
 
   getProduct(id: string) {
     return this.http.get<Product>(`${this._apiUrl}/${id}`);
+  }
+
+  getProductsByPage(limit: number, offset: number) {
+    return this.http.get<Product[]>(`${this._apiUrl}/`, {
+      params: { limit, offset }
+    });
   }
 
   create(dto: CreateProductDTO) {

@@ -28,6 +28,8 @@ export class ProductsComponent implements OnInit {
       name: ''
     }
   }
+  limit = 10;
+  offset = 0;
 
   constructor(
     private storeService: StoreService,
@@ -37,9 +39,14 @@ export class ProductsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.productsService.getAllProducts()
+    this.loadData();
+  }
+
+  loadData() {
+    this.productsService.getAllProducts(this.limit, this.offset)
       .subscribe(data => {
-        this.products = data;
+        this.products.push(...data);
+        this.offset += this.limit;
       });
   }
 
@@ -69,12 +76,12 @@ export class ProductsComponent implements OnInit {
       categoryId: 2
     }
     this.productsService.create(product)
-    .subscribe(
-      (data) => {
-        console.log("create: ", data);
-        this.products.unshift(data);
-      }
-    )
+      .subscribe(
+        (data) => {
+          console.log("create: ", data);
+          this.products.unshift(data);
+        }
+      )
   }
 
   updateProduct() {
@@ -83,21 +90,21 @@ export class ProductsComponent implements OnInit {
     }
     const id = this.productChosen.id;
     this.productsService.update(id, changes)
-    .subscribe((data) => {
-      console.log("updated", data);
-      const productIndex = this.products.findIndex(item => item.id === this.productChosen.id);
-      this.products[productIndex] = data;
-    })
+      .subscribe((data) => {
+        console.log("updated", data);
+        const productIndex = this.products.findIndex(item => item.id === this.productChosen.id);
+        this.products[productIndex] = data;
+      })
   }
 
   deleteProduct() {
     const id = this.productChosen.id;
     this.productsService.delete(id)
-    .subscribe(() => {
-      const productIndex = this.products.findIndex(item => item.id === this.productChosen.id);
-      this.products.splice(productIndex, 1);
-      this.showProductDetail = false;
-    });
+      .subscribe(() => {
+        const productIndex = this.products.findIndex(item => item.id === this.productChosen.id);
+        this.products.splice(productIndex, 1);
+        this.showProductDetail = false;
+      });
   }
 
 }
