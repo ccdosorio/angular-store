@@ -4,12 +4,14 @@ import { retry } from 'rxjs';
 
 import { CreateProductDTO, Product, UpdateProductDTO } from '../models/product.model';
 
+import { environment } from "../../environments/environment";
+
 @Injectable({
   providedIn: 'root'
 })
 export class ProductsService {
 
-  private _apiUrl: string = 'https://young-sands-07814.herokuapp.com/api/products';
+  private _apiUrl: string = `${environment.API_URL}/api/products`;
   // private _apiUrl: string = 'https://young-sands-07814.herokuuuapp.com/api/products'; -> para el retry
 
   constructor(private http: HttpClient) { }
